@@ -119,21 +119,21 @@ let make_cancel b = ignore (cancel b);;
    print_board b
 ;;
  let rec minmax b prof = 
-   let moves = get_valids_moves b in
+   let moves = get_valids_moves b in (* on recupère tous les coups valides. *)
    let rec foreach_moves (best_score, best_move)= function
-     | [] ->  (best_score, best_move)
-     | m::list ->
-       let b = move b m in
+     | [] ->  (best_score, best_move) (* on renvoit le meilleur coup trouvé. *)
+     | m::list -> (* pour chaque coup de la liste *)
+       let b = move b m in (* on le joue *)
        let score = eval b in
-       if score = PInf then (make_cancel b; (score, m))
+       if score = PInf then (make_cancel b; (score, m)) (* s'il permet de gagner directement, on le choisit ! *)
        else
-	 let s, _ = if prof <= 0 then ((--)(eval b), m) else minmax b (prof-1) in
-	 make_cancel b;
+	 let s, _ = if prof <= 0 then ((--)(eval b), m) else minmax b (prof-1) in (* sinon on regarde les réplique de l'adversaire*)
+	 make_cancel b; (* on annule le coup et on passe au suivant. *)
 	 foreach_moves (if ((--) s) >>= best_score then ((--) s, m) else  (best_score, best_move)) list
    in  
-   if moves = [] then (N 0, 0)
+   if moves = [] then (N 0, 0) (* si il y a aucun coup à jouer alors il y a match nul : score = 0. *)
    else
-      foreach_moves (MInf, 0) moves
+      foreach_moves (MInf, 0) moves (* on parcours les coups et on cherche celui qui rapporte le plus de points *)
 ;; 
 
 
