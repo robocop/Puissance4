@@ -1,6 +1,5 @@
 #use "topfind";;
 #use "extendn.ml";;
-#use "types.ml";;
+#use "board.ml";;
 #use "eval.ml";;
 #use "p4.ml";;
-
